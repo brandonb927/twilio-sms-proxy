@@ -18,8 +18,7 @@
   },
   "scripts": {
     "dev": "nodemon src/index.js --exec 'babel-node'",
-    "build": "babel src -d build",
-    "serve": "npm run build && node build/index.js",
+    "start": "./node_modules/.bin/babel-node src/index.js",
     "test": "jest"
   },
   "author": "Brandon Brown <hello@brandonb.io>",
