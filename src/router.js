@@ -4,7 +4,7 @@ import t from './twilio'
 
 const router = express.Router()
 
-router.post('/sms/receive', (req, res) => {
+router.post('/sms/webhooks', (req, res) => {
   let fromRecipient = Recipient.getByNumber(req.body.From)
   let toRecipient = Recipient.getByNumber(req.body.To)
   res.status(200).json({
