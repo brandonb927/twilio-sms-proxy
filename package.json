@@ -17,7 +17,7 @@
     "nodemon": "^1.11.0"
   },
   "scripts": {
-    "dev": "nodemon src/index.js --exec 'babel-node'",
+    "dev": "NODE_ENV=development nodemon src/index.js --exec 'babel-node'",
     "start": "./node_modules/.bin/babel-node src/index.js",
     "test": "jest"
   },

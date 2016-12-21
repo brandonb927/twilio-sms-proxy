@@ -1,8 +1,10 @@
-import 'dotenv/config'
-
 import express from 'express'
 import bodyParser from 'body-parser'
 import router from './router'
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
 const PORT = process.env.PORT || 3030
 

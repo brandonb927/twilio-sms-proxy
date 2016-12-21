@@ -1,13 +1,6 @@
 import express from 'express'
 import {Thread, Message, Recipient} from './models'
-
-import twilio from 'twilio'
-
-
-const t = new twilio.RestClient(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-)
+import t from './twilio'
 
 const router = express.Router()
 
