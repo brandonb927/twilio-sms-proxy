@@ -11,13 +11,6 @@ const t = new twilio.RestClient(
 
 const router = express.Router()
 
-
-router.get('/', (req, res) => {
-  res.json({
-    message: 'This is not the JSON you\'re looking for'
-  })
-})
-
 router.post('/sms/receive', (req, res) => {
   let fromRecipient = Recipient.getByNumber(req.body.From)
   let toRecipient = Recipient.getByNumber(req.body.To)
