@@ -9,7 +9,7 @@ const errorHandler = (err) => {
     res.json({
       success: false,
       data: {
-        message: err.message,
+        message: err.message
       }
     })
   }

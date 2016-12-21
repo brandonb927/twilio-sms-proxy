@@ -1,13 +1,8 @@
-function throwIfMissing (param) {
-  throw new Error(`Missing parameter "${param}"`);
-}
-
-function typeCheck (expectedType, obj) {
-  if (obj.constructor.name !== expectedType) {
-    throw new Error(`Expected type "${expectedType}"`)
-  }
-  return obj
-}
+import {
+  MissingParameterError,
+  throwIfMissing,
+  typeCheck
+} from './errors'
 
 /**
 * BaseClass is inherited by all other models
@@ -28,19 +23,35 @@ class Thread extends BaseClass {
     super(params)
     this.messages = params.messages || []
   }
-  // TODO: some sorting methods maybe?
+
+  static getClassName () {
+    return 'Thread'
+  }
+
+  getClassName () {
+    return Thread.getClassName()
+  }
 }
 
 /**
-*
+* A Message contains
 */
 class Message extends BaseClass {
   constructor (params={}) {
     super(params)
-    this.from = typeCheck('Recipient', params.from) || throwIfMissing('from')
-    this.to = typeCheck('Recipient', params.to) || throwIfMissing('to')
+    this.to = typeCheck(Recipient, params.to) || throwIfMissing(Message, params.to, 'to')
+    this.from = typeCheck(Recipient, params.from) || throwIfMissing(Message, params.from, 'from')
+    this.message = params.message || ''
+    this.media = params.media || []
   }
-  // TODO: probably missing some params, etc.
+
+  static getClassName () {
+    return 'Message'
+  }
+
+  getClassName () {
+    return Message.getClassName()
+  }
 }
 
 /**
@@ -49,10 +60,17 @@ class Message extends BaseClass {
 class Recipient extends BaseClass {
   constructor (params={}) {
     super(params)
-    this.name = params.name || throwIfMissing('name')
-    this.number = params.number || throwIfMissing('number')
+    this.name = params.name || throwIfMissing(Recipient, params.name, 'name')
+    this.number = params.number || throwIfMissing(Recipient, params.number, 'number')
   }
-  // TODO: probably missing some params, etc.
+
+  static getClassName () {
+    return 'Recipient'
+  }
+
+  getClassName () {
+    return Recipient.getClassName()
+  }
 }
 
 export {
