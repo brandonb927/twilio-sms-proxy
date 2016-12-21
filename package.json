@@ -32,7 +32,8 @@
     "1url": "https://github.com/brandonb927/twilio-sms-proxy.git"
   },
   "engines": {
-    "node": ">=6.9.1"
+    "node": ">=6.9.1",
+    "npm": ">=3"
   },
   "jest": {
     "testEnvironment": "node"
