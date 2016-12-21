@@ -17,6 +17,12 @@ test('Valid Recipient', () => {
   it('should be an instance of Recipient', () => {
     expect(recipient).toBeInstanceOf(Recipient)
   })
+  it('should be an instance of Recipient and contain a name field', () => {
+    expect(Object.keys(recipient)).toContain('name')
+  })
+  it('should be an instance of Recipient and contain a number field', () => {
+    expect(Object.keys(recipient)).toContain('number')
+  })
 })
 
 test('Invalid Recipient', () => {
@@ -50,10 +56,10 @@ test('Valid Message', () => {
     from: new Recipient({ name: 'Foo Bar', number: '+12345678910' }),
     to: new Recipient({ name: 'Baz Qux', number: '+15558675309' })
   })
-  it('should be an instance of Message and contain a from', () => {
+  it('should be an instance of Message and contain a from field', () => {
     expect(Object.keys(message)).toContain('from')
   })
-  it('should be an instance of Message and contain a from', () => {
+  it('should be an instance of Message and contain a to field', () => {
     expect(Object.keys(message)).toContain('to')
   })
 })

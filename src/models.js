@@ -1,8 +1,10 @@
 import {
+  DoesNotExist,
   MissingParameterError,
   throwIfMissing,
   typeCheck
 } from './errors'
+
 
 /**
 * BaseClass is inherited by all other models
@@ -71,7 +73,25 @@ class Recipient extends BaseClass {
   getClassName () {
     return Recipient.getClassName()
   }
+
+  // ORM-style methods
+
+  static getByNumber (number) {
+    if (!number) {
+      throw new DoesNotExist({expected: this})
+    }
+
+    return whitelistedRecipients.filter((recip) => {
+      return recip.number === number
+    })[0]
+  }
 }
+
+// TODO: move this into a db or something elsewhere but not here
+// Also, this is down at the bottom because Recipient needs to be defined first
+const whitelistedRecipients = [
+  
+]
 
 export {
   Thread,

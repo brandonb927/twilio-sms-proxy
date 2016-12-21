@@ -18,18 +18,23 @@ class ExpectedTypeError extends Error {
   }
 }
 
+class DoesNotExist extends Error {
+  constructor(errorOpts) {
+    super(errorOpts)
+    this.name = 'DoesNotExist'
+    this.message = `Couldn't find resource for ${errorOpts.expected.getClassName()}`
+  }
+}
+
 /**
  * Helper functions
  */
 
 function throwIfMissing (expectedType, param, paramName) {
-  console.log(expectedType);
-  console.log(param);
-  console.log(paramName);
   if (param === '' && param !== undefined && param !== null) {
     return param
   } else {
-    throw new MissingParameterError({expectedType, paramName});
+    throw new MissingParameterError({expectedType, paramName})
   }
 }
 
@@ -45,6 +50,7 @@ function typeCheck (expected, actual) {
 export {
   MissingParameterError,
   ExpectedTypeError,
+  DoesNotExist,
   throwIfMissing,
   typeCheck
 }
