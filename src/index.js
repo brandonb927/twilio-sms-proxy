@@ -24,5 +24,5 @@ app.use('*', (req, res, next) => {
 // Once the db is up, run the thing
 databaseUp().then(() => {
   app.listen(PORT)
-  console.log(`Magic happens on port ${PORT}`)
+  console.log(`😁  App running on port ${PORT}`)
 })
