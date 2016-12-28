@@ -1,10 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import router from './router'
-
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
+import {databaseUp} from './db/config'
 
 const PORT = process.env.PORT || 3030
 
@@ -24,5 +21,8 @@ app.use('*', (req, res, next) => {
   })
 })
 
-app.listen(PORT)
-console.log(`Magic happens on port ${PORT}`)
+// Once the db is up, run the thing
+databaseUp().then(() => {
+  app.listen(PORT)
+  console.log(`Magic happens on port ${PORT}`)
+})
