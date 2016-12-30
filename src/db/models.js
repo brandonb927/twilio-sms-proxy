@@ -36,7 +36,7 @@ let Recipient = db.define('Recipient', _.extend(baseProperties, {
 }))
 
 Recipient.getByNumber = function (number) {
-  return this.find({
+  return this.findOne({
     where: {
       number: number
     }
