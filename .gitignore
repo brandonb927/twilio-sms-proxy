@@ -1,9 +1,11 @@
 # PG data
 pg_data
 
-
 # Environment settings
 .env
 
 # Build folder
 build/
+
+# Whitelisted Recipients
+src/scripts/createWhitelistedRecipients.js
