@@ -1,7 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import router from './router'
-import {databaseUp} from './db/config'
+import {initModels} from './db/models'
 
 const PORT = process.env.PORT || 3030
 
@@ -22,7 +22,7 @@ app.use('*', (req, res, next) => {
 })
 
 // Once the db is up, run the thing
-databaseUp().then(() => {
+initModels().then(() => {
   app.listen(PORT)
   console.log(`😁  App running on port ${PORT}`)
 })
