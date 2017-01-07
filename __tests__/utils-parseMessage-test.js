@@ -43,11 +43,26 @@ test('Valid average parsed message', () => {
 
   const message = parseMessage(unparsedMessage)
   it('should contain a recipient field', () => {
-    expect(message).toContain('recipient')
+    expect(message.recipient).toEqual(expectedRecipient)
   })
   it('should contain a body field', () => {
-    expect(message).toContain('body')
+    expect(message.body).toEqual(expectedBody)
   })
+})
+
+test('Invalid parsed message', () => {
+  const unparsedMessage = `Here's some unicode emoji 🏂🏂🏂
+  and a new line because some people do this in an SMS. Maybe another sentence. Or two.
+
+  Some new lines here as well.`
+
+  const expectedRecipient = null
+  const expectedBody = `Here's some unicode emoji 🏂🏂🏂
+  and a new line because some people do this in an SMS. Maybe another sentence. Or two.
+
+  Some new lines here as well.`
+
+  const message = parseMessage(unparsedMessage)
   it('should contain a recipient field', () => {
     expect(message.recipient).toEqual(expectedRecipient)
   })
