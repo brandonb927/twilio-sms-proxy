@@ -1,5 +1,8 @@
 import express from 'express'
-import {Recipient} from './db/models'
+import {
+  Recipient,
+  Message
+} from './db/models'
 import parseMessage from './utils/parseMessage'
 import {SMSWorker} from './workers'
 
@@ -7,6 +10,13 @@ const router = express.Router()
 
 function throwError (number) {
   throw new Error(`Recipient with number ${number} does not exist`)
+}
+
+function sendMessageToRecipient (message) {
+  console.info(message.toJSON())
+
+  // let worker = new SMSWorker()
+  // worker.spawn(twilioMessageData)
 }
 
 function twilioResponseHandler (res) {
@@ -20,6 +30,7 @@ router.post('/sms/webhooks', (req, res) => {
   // recipient's number and body of the message
   let {number, body} = parseMessage(req.body.Body)
 
+  // Try and lookup the parsed To and From recipients
   Promise.all([
     Recipient.getByNumber(req.body.From),
     Recipient.getByNumber(number)
@@ -33,17 +44,39 @@ router.post('/sms/webhooks', (req, res) => {
 
     // If the To recipient doesn't exist, drop out at this point
     if (!toRecipient) {
-      throwError(number)
-    }
+      // TODO: lookup whether or not the incoming message is part of an ongoing thread
+      Recipient
+        .getByNumber(req.body.To)
+        .then((recipient) => {
+          if (!recipient) {
+            throwError(recipient)
+          }
 
-    let twilioMessageData = {
-      body: body,
-      to: toRecipient.number,
-      from: process.env.TWILIO_SMS_NUMBER
+          return Message.create({
+            to: recipient.id,
+            from: fromRecipient.id,
+            body: body
+          })
+        })
+        .then((message) => {
+          sendMessageToRecipient(message)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    } else {
+      Message.create({
+        to: toRecipient.id,
+        from: fromRecipient.id,
+        body: body
+      })
+      .then((message) => {
+        sendMessageToRecipient(message)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
     }
-
-    let worker = new SMSWorker()
-    worker.spawn(twilioMessageData)
   }).catch((err) => {
     console.error(err)
   })

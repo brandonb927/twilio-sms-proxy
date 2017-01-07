@@ -8,26 +8,35 @@
  */
 
 const SPLIT_CHAR = '\n'
+const MATCH_TO_REGEX = new RegExp(/^to:?\s?(.*)\n/gi)
 const STRIP_REGEX = new RegExp(/^\s+|\s+$/g)
 const REPLACE_NON_DIGIT_REGEX = new RegExp(/[^\d]/gi)
 
 export default function parseMessage (sms) {
-  let splitMessage = sms.split(SPLIT_CHAR) // Split on the first new line
-  let recipientNumber = splitMessage.shift()
-  let body = splitMessage.join(SPLIT_CHAR)
+  let recipientNumber = null
+  let body = null
+  let containsToNumber = false
 
-  // Split anything we don't want from the start and end of the strings
-  // http://stackoverflow.com/a/14572494/582369
-  recipientNumber = recipientNumber.replace(STRIP_REGEX, '')
-  body = body.replace(STRIP_REGEX, '')
+  if (sms.match(MATCH_TO_REGEX)) {
+    containsToNumber = true
+  }
 
-  // Make sure the recipientNumber number is formatted correctly
-  recipientNumber = recipientNumber.replace(REPLACE_NON_DIGIT_REGEX, '')
+  if (containsToNumber) {
+    // Split on the first new line after the initial "to: ..."
+    let splitMessage = sms.split('\n')
 
-  let number = recipientNumber ? `+${recipientNumber}` : null
+    // Do some massaging of the text
+    recipientNumber = splitMessage.shift()
+    recipientNumber = recipientNumber.replace(STRIP_REGEX, '')
+    recipientNumber = recipientNumber.replace(REPLACE_NON_DIGIT_REGEX, '')
+    body = splitMessage.join(SPLIT_CHAR)
+    body = body.replace(STRIP_REGEX, '')
+  } else {
+    body = sms
+  }
 
   return {
-    number: number,
+    number: recipientNumber ? `+${recipientNumber}` : null,
     body: body
   }
 }
