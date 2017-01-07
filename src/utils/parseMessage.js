@@ -24,8 +24,10 @@ export default function parseMessage (sms) {
   // Make sure the recipientNumber number is formatted correctly
   recipientNumber = recipientNumber.replace(REPLACE_NON_DIGIT_REGEX, '')
 
+  let number = recipientNumber ? `+${recipientNumber}` : null
+
   return {
-    number: `+${recipientNumber}`,
+    number: number,
     body: body
   }
 }

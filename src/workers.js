@@ -32,7 +32,7 @@ export class SMSWorker extends WorkerBase {
     }
 
     super.spawn(() => {
-      // Send an SMS using the Twilip API
+      // Send an SMS using the Twilio API
       console.info(`==> `, data)
       twilio.messages.create(
         data,
