@@ -10,11 +10,17 @@ const baseProperties = {
   meta: dataTypes.JSON
 }
 
-let Thread = db.define('Thread', _.extend(baseProperties, {
+let Thread = db.define('Thread', _.merge({}, baseProperties, {
   messages: dataTypes.ARRAY(dataTypes.DECIMAL)
-}))
+}), {
+  classMethods: {
+    associate: function(models) {
+      Thread.hasMany(models.Message)
+    }
+  }
+})
 
-let Message = db.define('Message', _.extend(baseProperties, {
+let Message = db.define('Message', _.merge({}, baseProperties, {
   to: {
     type: dataTypes.INTEGER,
     notNull: true,
@@ -25,9 +31,15 @@ let Message = db.define('Message', _.extend(baseProperties, {
   },
   body: dataTypes.TEXT,
   media: dataTypes.ARRAY(dataTypes.TEXT)
-}))
+}), {
+  classMethods: {
+    associate: function(models) {
+      Message.hasOne(models.Recipient)
+    }
+  }
+})
 
-let Recipient = db.define('Recipient', _.extend(baseProperties, {
+let Recipient = db.define('Recipient', _.merge({}, baseProperties, {
   number: {
     type: dataTypes.STRING,
     notNull: true
